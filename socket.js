@@ -116,7 +116,7 @@ const initSocket = (server) => {
           status: messageStatus,
         });
 
-        await axios.post(`http://192.168.1.179:5000/api/messaging/sendMessage/${roomId}`, {
+        await axios.post(`https://uob-marketplace-api-0f05a58ba21a.herokuapp.com/api/messaging/sendMessage/${roomId}`, {
           senderId: message.senderId,
           receiverId: message.receiverId,
           content: message.content,

@@ -57,7 +57,7 @@ router.post('/deleteListing/:listingId', authMiddleware, async (req, res) => {
     // Delete associated images
     if (listing.imagesKey && listing.imagesKey.length > 0) {
       try {
-        const response = await axios.post('http://192.168.1.179:5000/api/images/deleteImages', {
+        const response = await axios.post('https://uob-marketplace-api-0f05a58ba21a.herokuapp.com/api/images/deleteImages', {
           imagesKey: listing.imagesKey
         });
       } catch (imageError) {
