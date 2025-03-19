@@ -6,7 +6,7 @@ const initSocket = (server) => {
 
   const io = new Server(server, {
     cors: {
-      origin: "http://192.168.1.179:3000", // Allow requests from your frontend
+      origin: "https://uob-marketplace.vercel.app", // Allow requests from your frontend
       methods: ["GET", "POST"],
     },
   });
