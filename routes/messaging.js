@@ -19,7 +19,7 @@ router.post('/getMessages/:conversationId', authMiddleware, async (req, res) => 
 
 
 // Send a message
-router.post('/sendMessage/:conversationId', authMiddleware, async (req, res) => {
+router.post('/sendMessage/:conversationId', async (req, res) => {
   const { senderId, receiverId, content, status } = req.body;
   const { conversationId } = req.params;
 
