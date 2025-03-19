@@ -97,7 +97,7 @@ router.post('/getImages', async (req, res) => {
 
 
 // Route to delete multiple images from S3 bucket
-router.post('/deleteImages', authMiddleware, async (req, res) => {
+router.post('/deleteImages', async (req, res) => {
   try {
     let imagesKey = req.body.imagesKey; // array of keys
 
