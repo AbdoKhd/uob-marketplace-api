@@ -65,10 +65,10 @@ router.post("/send-registration-code", async (req, res) => {
   console.log("sending registration code to this email: ", email);
 
   // Validate email format
-  // const universityEmailRegex = /^[a-zA-Z0-9._%+-]+@(balamand.edu.lb|std.balamand.edu.lb|fty.balamand.edu.lb)$/;
-  // if (!universityEmailRegex.test(email)) {
-  //   return res.status(400).json({ message: "Invalid email. Only University of Balamand emails are allowed." });
-  // }
+  const universityEmailRegex = /^[a-zA-Z0-9._%+-]+@(balamand.edu.lb|std.balamand.edu.lb|fty.balamand.edu.lb)$/;
+  if (!universityEmailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email. Only University of Balamand emails are allowed." });
+  }
 
   // Check if the email is already registered
   const existingUser = await User.findOne({ email });
