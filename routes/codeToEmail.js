@@ -98,9 +98,9 @@ router.post("/send-registration-code", async (req, res) => {
     
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        //console.error("Error sending email:", error);
+        console.error("Error sending email:", error);
       } else {
-        //console.log("Email sent:", info.response);
+        console.log("Email sent:", info.response);
       }
     });
     res.status(200).json({ message: "Registration code sent successfully" });
