@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const ResetCode = require("../models/ResetCode");
 const RegistrationCode = require("../models/RegistrationCode");
 require("dotenv").config();
+const util = require("util");
 
 // Email Transporter
 const transporter = nodemailer.createTransport({
@@ -90,15 +91,13 @@ router.post("/send-registration-code", async (req, res) => {
       text: `This is your registration code is: ${resetCode}. It expires in 5 minutes`,
       // replyTo: process.env.EMAIL_USER,
     };
-    
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending email:", error);
-        return res.status(400).json({ message: error.message });
-      } else {
-        console.log("Email sent:", info.response);
-      }
-    });
+
+    // Convert sendMail to a Promise-based function
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+
+    // Await the email sending process
+    await sendMailAsync(mailOptions);
+    console.log("Registration code sent successfully");
 
     // Store the registration code in the database with expiration
     await RegistrationCode.findOneAndUpdate(
@@ -106,8 +105,6 @@ router.post("/send-registration-code", async (req, res) => {
       { email, code: resetCode, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expires in 5 minutes
       { upsert: true, new: true }
     );
-
-    console.log("Registration code sent successfully");
 
     res.status(200).json({ message: "Registration code sent successfully" });
   } catch (error) {
