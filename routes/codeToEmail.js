@@ -38,14 +38,12 @@ router.post("/send-reset-code", async (req, res) => {
       // replyTo: "UOB@marketplace.com",
     };
     
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending email:", error);
-        return res.status(400).json({ message: error.message });
-      } else {
-        console.log("Email sent:", info.response);
-      }
-    });
+    // Convert sendMail to a Promise-based function
+    const sendMailAsync = util.promisify(transporter.sendMail.bind(transporter));
+
+    // Await the email sending process
+    await sendMailAsync(mailOptions);
+    console.log("Reset code sent successfully");
 
     // Store the reset code in the database with expiration
     await ResetCode.findOneAndUpdate(
