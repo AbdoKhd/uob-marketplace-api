@@ -107,6 +107,8 @@ router.post("/send-registration-code", async (req, res) => {
       { upsert: true, new: true }
     );
 
+    console.log("Registration code sent successfully");
+
     res.status(200).json({ message: "Registration code sent successfully" });
   } catch (error) {
     console.error("Error sending registration code:", error);
