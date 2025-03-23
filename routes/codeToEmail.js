@@ -29,13 +29,6 @@ router.post("/send-reset-code", async (req, res) => {
     // Generate a 4-digit reset code
     const resetCode = crypto.randomInt(1000, 9999).toString();
 
-    // Store the reset code in the database with expiration
-    await ResetCode.findOneAndUpdate(
-      { email },
-      { email, code: resetCode, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expires in 5 minutes
-      { upsert: true, new: true }
-    );
-
     const mailOptions = {
       from: `"UOB Marketplace" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -46,11 +39,20 @@ router.post("/send-reset-code", async (req, res) => {
     
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        //console.error("Error sending email:", error);
+        console.error("Error sending email:", error);
+        return res.status(400).json({ message: error.message });
       } else {
-        //console.log("Email sent:", info.response);
+        console.log("Email sent:", info.response);
       }
     });
+
+    // Store the reset code in the database with expiration
+    await ResetCode.findOneAndUpdate(
+      { email },
+      { email, code: resetCode, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expires in 5 minutes
+      { upsert: true, new: true }
+    );
+
     res.status(200).json({ message: "Reset code sent successfully" });
   } catch (error) {
     console.error("Error sending reset code:", error);
@@ -81,13 +83,6 @@ router.post("/send-registration-code", async (req, res) => {
     // Generate a 4-digit registration code
     const resetCode = crypto.randomInt(1000, 9999).toString();
 
-    // Store the registration code in the database with expiration
-    await RegistrationCode.findOneAndUpdate(
-      { email },
-      { email, code: resetCode, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expires in 5 minutes
-      { upsert: true, new: true }
-    );
-
     const mailOptions = {
       from: `"UOB Marketplace" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -99,10 +94,19 @@ router.post("/send-registration-code", async (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Error sending email:", error);
+        return res.status(400).json({ message: error.message });
       } else {
         console.log("Email sent:", info.response);
       }
     });
+
+    // Store the registration code in the database with expiration
+    await RegistrationCode.findOneAndUpdate(
+      { email },
+      { email, code: resetCode, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expires in 5 minutes
+      { upsert: true, new: true }
+    );
+
     res.status(200).json({ message: "Registration code sent successfully" });
   } catch (error) {
     console.error("Error sending registration code:", error);
